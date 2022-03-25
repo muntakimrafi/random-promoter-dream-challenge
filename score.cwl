@@ -36,19 +36,26 @@ requirements:
           #!/usr/bin/env python
           import argparse
           import json
+          import scipy 
+          import numpy
+          
+          a = np.zeroes((10))
+          b = np.zeroes((10))
+          
           parser = argparse.ArgumentParser()
           parser.add_argument("-f", "--submissionfile", required=True, help="Submission File")
           parser.add_argument("-r", "--results", required=True, help="Scoring results")
           parser.add_argument("-g", "--goldstandard", required=True, help="Goldstandard for scoring")
 
           args = parser.parse_args()
-          score = 3
+          score = scipy.stats.pearsonr(a,b)[0]
+          
           prediction_file_status = "SCORED"
           # secondary_metric and secondary_metric_value are optional
           result = {'primary_metric': 'auc',
-                    'primary_metric_value': 0.8,
+                    'primary_metric_value': score,
                     'secondary_metric': 'aupr',
-                    'secondary_metric_value': 0.2,
+                    'secondary_metric_value': score,
                     'submission_status': prediction_file_status}
           with open(args.results, 'w') as o:
             o.write(json.dumps(result))
